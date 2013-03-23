@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mind of Solutions</title>
+
+  <!--Change your key in the URL -->
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDr08Cw4WmqBUJMw1JVkNCLzle8whFlRNQ&sensor=true"></script>
+
+    <script>
+
+	  //CallBack function if getCurrentPosition() is successfull
+      function geolocationSuccess(position) {
+        var userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		alert("Your latitude and longitude: "userLatLng);
+      
+        var option = {
+          zoom : 15,
+          center : userLatLng,
+          mapTypeId : google.maps.MapTypeId.ROADMAP
+        };
+        // Draw the map
+        var mapObject = new google.maps.Map(document.getElementById("map"), option);
+        // Place the marker
+        new google.maps.Marker({
+          map: mapObject,
+          position: userLatLng
+        });
+       
+      
+      }
+
+	  //CallBack function if getCurrentPosition() fails
+      function geolocationError(positionError) {
+        document.getElementById("error").innerHTML += "Error: " + positionError.message + "<br />";
+      }
+
+
+	  //Strating function
+      function geolocateUser() {
+        // If the browser supports the Geolocation API
+        if (navigator.geolocation)
+        {
+          var positionOptions = {
+            enableHighAccuracy: true,
+            timeout: 10 * 1000 // 10 seconds
+          };
+		 
+          navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, positionOptions);
+		  		 
+        }
+        else
+          document.getElementById("error").innerHTML += "Your browser doesn't support the Geolocation API";
+      }
+      window.onload = geolocateUser;
+    </script>
+    <style type="text/css">
+      #map {
+        width: 600px;
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Your Location</h1>
+    <div id="map"></div>   
+    <p id="error"></p>
+  </body>
+</html>
